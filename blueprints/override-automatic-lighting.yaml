@@ -38,9 +38,7 @@ trigger:
       for: '00:00:00'
       behavior: each
   - trigger: scene.activated
-    target:
-      entity_id: !input scenes
-    options: {}
+    target: !input scenes
 
 condition:
   - condition: template
