@@ -1,0 +1,51 @@
+blueprint:
+  name: Override automatic lighting
+  domain: automation
+  input:
+    area_id:
+      name: Area
+      description: The target area where the lights are managed.
+      selector:
+        area: {}
+    automatic_lighting:
+      name: Automatic Lighting
+      description: The `input_boolean` used to enable or disable automatic lighting.
+      default: input_boolean.automatic_lighting
+      selector:
+        entity:
+          domain: input_boolean
+    scenes:
+      name: Scene
+      description: The scenes that trigger the override.
+      selector:
+        entity:
+          domain: scene
+mode: single
+trigger:
+  - trigger: light.turned_on
+    target:
+      area_id: !input area_id
+    options:
+      for: '00:00:00'
+      behavior: each
+  - trigger: light.turned_off
+    target:
+      area_id: !input area_id
+    options:
+      for: '00:00:00'
+      behavior: each
+  - trigger: scene.activated
+    target:
+      entity_id: !input scenes
+    options: {}
+condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.context.parent_id == none }}'
+  - condition: template
+    value_template: '{{ trigger.to_state.context.user_id != none or trigger.to_state.context.id != none }}'
+action:
+  - action: input_boolean.turn_off
+    metadata: {}
+    target:
+      entity_id: !input target_automatic_lightingboolean
+    data: {}
