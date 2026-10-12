@@ -48,8 +48,9 @@ triggers:
     to: 'off'
 
 conditions:
-  - condition: template
-    value_template: "{{ is_state(input_mode, input_manual) }}"
+  - condition: state
+    entity_id: !input mode
+    state: !input input_manual
   - condition: state
     entity_id: !input sleep_mode
     state: 'off'
