@@ -49,10 +49,7 @@ triggers:
 
 conditions:
   - condition: template
-    variables:
-      input_mode: !input mode
-      input_manual: !input manual_option
-    value_template: "{{ is_state(input_mode, input_manual) }}"
+    value_template: "{{ is_state('!input mode', '!input manual_option') }}"
   - condition: state
     entity_id: !input sleep_mode
     state: 'off'
