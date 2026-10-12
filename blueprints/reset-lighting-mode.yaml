@@ -9,12 +9,6 @@ blueprint:
         entity:
           filter:
             domain: input_select
-    manual_option:
-      name: Manual Option
-      description: Enter the option value that represents the manual mode state (e.g., Manuell).
-      default: Manuell
-      selector:
-        text: {}
     reset_option:
       name: Reset Option
       description: Enter the option value to select when resetting the mode (e.g., Automatisk).
@@ -47,12 +41,7 @@ triggers:
     entity_id: !input sleep_mode
     to: 'off'
 
-conditions:
-  - condition: template
-    value_template: "{{ is_state('!input mode', '!input manual_option') }}"
-  - condition: state
-    entity_id: !input sleep_mode
-    state: 'off'
+conditions: []
 
 actions:
   - action: input_select.select_option
