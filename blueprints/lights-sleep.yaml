@@ -1,0 +1,85 @@
+blueprint:
+  name: "Lights (Sleep)"
+  domain: automation
+  input:
+    area_id:
+      name: Area
+      description: The target area where occupancy sensors and lights are managed.
+      selector:
+        area: {}
+    automatic_lighting:
+      name: Automatic Lighting
+      description: The `input_boolean` used to enable or disable automatic lighting.
+      default: input_boolean.automatic_lighting
+      selector:
+        entity:
+          domain: input_boolean
+    sleep_mode:
+      name: Sleep Mode
+      description: The `input_boolean` indicating that sleep mode is active.
+      default: input_boolean.sleep_mode
+      selector:
+        entity: {}
+    away_mode:
+      name: Away Mode
+      description: The `input_boolean` indicating that away mode is active.
+      default: input_boolean.away_mode
+      selector:
+        entity: {}
+    scene:
+      name: Scene
+      description: The scene to activate when occupancy is detected.
+      selector:
+        entity:
+          domain: scene
+
+trigger:
+  - trigger: occupancy.detected
+    target:
+      area_id: !input area_id
+    options:
+      behavior: first
+      for: "00:00:00"
+    id: occupancy-detected
+  - trigger: occupancy.cleared
+    target:
+      area_id: !input area_id
+    options:
+      behavior: first
+      for: "00:00:00"
+    id: occupancy-cleared
+
+condition:
+  - condition: state
+    entity_id: !input away_mode
+    state: "off"
+  - condition: state
+    entity_id: !input automatic_lighting
+    state: "on"
+  - condition: state
+    entity_id: !input sleep_mode
+    state: "on"
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - occupancy-detected
+        sequence:
+          - action: scene.turn_on
+            metadata: {}
+            target:
+              entity_id: !input scene
+            data: {}
+      - conditions:
+          - condition: trigger
+            id:
+              - occupancy-cleared
+        sequence:
+          - action: light.turn_off
+            metadata: {}
+            target:
+              area_id: !input area_id
+            data: {}
+mode: single
