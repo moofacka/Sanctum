@@ -18,8 +18,9 @@ blueprint:
       name: Scene
       description: The scenes that trigger the override.
       selector:
-        entity:
-          domain: scene
+        target:
+          entity:
+            domain: scene
 mode: single
 trigger:
   - trigger: light.turned_on
