@@ -1,0 +1,5 @@
+secrets.yaml
+.HA_RESTORE
+*.db
+*.log
+.storage/
