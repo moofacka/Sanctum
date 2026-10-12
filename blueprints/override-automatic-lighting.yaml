@@ -47,5 +47,5 @@ action:
   - action: input_boolean.turn_off
     metadata: {}
     target:
-      entity_id: !input target_automatic_lightingboolean
+      entity_id: !input automatic_lighting
     data: {}
